@@ -3219,8 +3219,33 @@ function ConfigPanel({
         });
         g.lineup = (g.lineup || []).map(resetPlayer);
         g.bench = (g.bench || []).map(resetPlayer);
-        g.lineupThem = (g.lineupThem || []).map(resetPlayer);
-        g.benchThem = (g.benchThem || []).map(resetPlayer);
+        const oppChanged = opp.trim() && opp.trim() !== g.oppTeam;
+        if (oppChanged) {
+          const pos = ["投", "捕", "一", "二", "三", "遊", "左", "中", "右"];
+          g.lineupThem = pos.map((p, i) => ({
+            name: `${opp.trim()}${i + 1}`,
+            num: String(i + 1),
+            pos: p,
+            ab: 0,
+            hits: 0,
+            rbi: 0,
+            runs: 0,
+            pitchCount: 0
+          }));
+          g.benchThem = [10, 11, 12, 13, 14, 15, 16, 17].map(n => ({
+            name: `${opp.trim()}${n}`,
+            num: String(n),
+            pos: "",
+            ab: 0,
+            hits: 0,
+            rbi: 0,
+            runs: 0,
+            pitchCount: 0
+          }));
+        } else {
+          g.lineupThem = (g.lineupThem || []).map(resetPlayer);
+          g.benchThem = (g.benchThem || []).map(resetPlayer);
+        }
         g.inning = 1;
         g.isTop = true;
         g.balls = 0;
@@ -3262,6 +3287,7 @@ function ConfigPanel({
   }, "\uD83D\uDD04 \u540C\u30C1\u30FC\u30E0\u518D\u8A66\u5408\u958B\u59CB\uFF08\u9078\u624B\u540C\u3058\uFF09"), /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       upd(g => {
+        const oppChanged = opp.trim() && opp.trim() !== g.oppTeam;
         g.ourTeam = our;
         g.oppTeam = opp;
         g.maxInnings = inn;
@@ -3275,6 +3301,30 @@ function ConfigPanel({
         g.gameDate = gameDate;
         g.gameLocation = gameLocation;
         g.gameStartTime = gameStartTime;
+        if (oppChanged) {
+          const pos = ["投", "捕", "一", "二", "三", "遊", "左", "中", "右"];
+          g.lineupThem = pos.map((p, i) => ({
+            name: `${opp.trim()}${i + 1}`,
+            num: String(i + 1),
+            pos: p,
+            ab: 0,
+            hits: 0,
+            rbi: 0,
+            runs: 0,
+            pitchCount: 0
+          }));
+          g.benchThem = [10, 11, 12, 13, 14, 15, 16, 17].map(n => ({
+            name: `${opp.trim()}${n}`,
+            num: String(n),
+            pos: "",
+            ab: 0,
+            hits: 0,
+            rbi: 0,
+            runs: 0,
+            pitchCount: 0
+          }));
+          g.scorebookThem = g.lineupThem.map(() => ({}));
+        }
       });
       showToast("💾 変更を保存しました");
     },
